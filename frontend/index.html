@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Train Route Finder — Compare cheapest, fastest, and balanced train routes across India." />
+  <title>TrainRoute Finder | Ministry of Railways Route Planning Portal</title>
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ══════════════════ HEADER ══════════════════ -->
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <div class="logo" aria-label="Ministry of Railways Route Planning Portal home">
+        <span class="logo-icon" aria-hidden="true">🚂</span>
+        <span class="logo-text">TrainRoute <strong>Finder</strong></span>
+      </div>
+      <p class="tagline">Ministry of Railways - Route Planning Portal (Mock)</p>
+    </div>
+  </header>
+
+  <!-- Scrolling Ticker -->
+  <div class="gov-ticker" role="banner">
+    📢 IMPORTANT: This is a mock portal developed for BTech CSE demonstration. Data is indicative. Verify actual fares on the official IRCTC portal.
+  </div>
+
+  <!-- ══════════════════ SEARCH CARD ══════════════════ -->
+  <main class="container" id="main-content">
+    <section class="card search-card" aria-label="Search train routes">
+      <h1 class="sr-only">Search Train Routes</h1>
+
+      <form id="search-form" novalidate>
+
+        <!-- Source & Destination -->
+        <div class="input-row">
+          <div class="input-group">
+            <label for="source" class="input-label">From</label>
+            <div class="input-wrapper">
+              <span class="input-icon" aria-hidden="true">📍</span>
+              <input
+                type="text"
+                id="source"
+                name="source"
+                class="text-input"
+                placeholder="e.g. New Delhi"
+                autocomplete="off"
+                aria-required="true"
+                list="station-options"
+              />
+            </div>
+          </div>
+
+          <button type="button" id="swap-btn" class="swap-btn" aria-label="Swap source and destination" title="Swap stations">
+            ⇄
+          </button>
+
+          <div class="input-group">
+            <label for="destination" class="input-label">To</label>
+            <div class="input-wrapper">
+              <span class="input-icon" aria-hidden="true">🏁</span>
+              <input
+                type="text"
+                id="destination"
+                name="destination"
+                class="text-input"
+                placeholder="e.g. Mumbai CST"
+                autocomplete="off"
+                aria-required="true"
+                list="station-options"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Datalist for autocomplete (populated by JS) -->
+        <datalist id="station-options"></datalist>
+
+        <!-- Class & Date -->
+        <div class="options-row">
+          <div class="input-group flex-1">
+            <label for="travel-class" class="input-label">Class</label>
+            <div class="input-wrapper">
+              <span class="input-icon" aria-hidden="true">🪑</span>
+              <select id="travel-class" name="travel_class" class="select-input" aria-label="Select travel class">
+                <option value="SL">Sleeper (SL)</option>
+                <option value="3A">AC 3-Tier (3A)</option>
+                <option value="2A">AC 2-Tier (2A)</option>
+                <option value="1A">AC First Class (1A)</option>
+                <option value="CC">Chair Car (CC)</option>
+                <option value="2S">Second Sitting (2S)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="input-group flex-1">
+            <label for="travel-date" class="input-label">Date</label>
+            <div class="input-wrapper">
+              <span class="input-icon" aria-hidden="true">📅</span>
+              <input type="date" id="travel-date" name="travel_date" class="text-input" aria-label="Travel date" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Mode Toggle -->
+        <div class="mode-toggle-group" role="radiogroup" aria-label="Search mode">
+          <span class="input-label" id="mode-label">Priority</span>
+          <div class="toggle-pills">
+            <label class="pill">
+              <input type="radio" name="search_mode" value="cheapest" checked />
+              <span>💰 Cheapest</span>
+            </label>
+            <label class="pill">
+              <input type="radio" name="search_mode" value="fastest" />
+              <span>⚡ Fastest</span>
+            </label>
+            <label class="pill">
+              <input type="radio" name="search_mode" value="balanced" />
+              <span>⚖️ Balanced</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Submit -->
+        <button type="submit" id="search-btn" class="search-btn" aria-label="Search for train routes">
+          <span class="btn-text">Search Routes</span>
+          <span class="btn-icon" aria-hidden="true">→</span>
+        </button>
+
+      </form>
+    </section><!-- /.search-card -->
+
+    <!-- ══════════════════ RESULTS SECTION ══════════════════ -->
+    <section id="results-section" aria-live="polite" aria-label="Search results" hidden>
+
+      <!-- Loading Spinner -->
+      <div id="loading-spinner" class="spinner-wrapper" hidden aria-label="Loading results …" role="status">
+        <div class="spinner" aria-hidden="true"></div>
+        <p class="spinner-text">Finding best routes…</p>
+      </div>
+
+      <!-- Error Banner -->
+      <div id="error-banner" class="error-banner" hidden role="alert">
+        <span class="error-icon" aria-hidden="true">⚠️</span>
+        <p id="error-message">Something went wrong. Please try again.</p>
+      </div>
+
+      <!-- Results Header -->
+      <div id="results-header" class="results-header" hidden>
+        <h2 class="results-title">Available Routes</h2>
+        <p id="results-meta" class="results-meta"></p>
+      </div>
+
+      <!-- Route Cards Container -->
+      <div id="route-cards" class="route-cards" role="list" aria-label="Route results"></div>
+
+      <!-- Map -->
+      <div id="map-wrapper" class="card map-card" hidden>
+        <h2 class="map-title">Route Map</h2>
+        <div id="map" style="height: 500px; width: 100%;"></div>
+      </div>
+
+    </section><!-- /#results-section -->
+  </main><!-- /.container -->
+
+  <!-- ══════════════════ FOOTER ══════════════════ -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container">
+      <p>© 2026 TrainRoute Finder &nbsp;·&nbsp; Data is indicative. Verify fares on official IRCTC portal.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+{
+  "route_legs": [
+    {
+      "arrive_time": 14.0,
+      "cost": 1500.0,
+      "depart_time": 9.0,
+      "edge_type": "IN_TRAIN",
+      "from_station": "STN_A",
+      "to_station": "STN_C"
+    }
+  ],
+  "total_cost": 1500.0,
+  "total_time": 5.0
+}
