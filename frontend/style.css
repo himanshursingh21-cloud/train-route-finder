@@ -3,7 +3,7 @@
    Theme: Official Indian Government / IRCTC Portal Aesthetic
    ══════════════════════════════════════════════════════════ */
 
-/* ── Reset & Variables ─────────────────────────── */
+/* ── Reset & Variables ─────────────────────────────── */
 *,
 *::before,
 *::after {
@@ -70,14 +70,24 @@ body {
   flex-direction: column;
 }
 
-/* ── Utility ─────────────────────────────────────── */
-.sr-only {
-  position: absolute;
-  width: 1px; height: 1px;
-  padding: 0; margin: -1px;
+.map-card {
+  padding: var(--space-md);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius-md);
+  background: var(--clr-surface);
+  height: 400px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  clip: rect(0,0,0,0);
-  border: 0;
+}
+
+.map-title {
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  margin-bottom: var(--space-md);
+  color: var(--clr-primary);
+  height: 30px;
+  line-height: 30px;
+  padding: 0 var(--space-md);
 }
 
 .container {
@@ -85,6 +95,14 @@ body {
   max-width: 960px;
   margin-inline: auto;
   padding-inline: var(--space-md);
+}
+
+.main.container {
+  flex: 1;
+  padding-block: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
 }
 
 /* ── Header ── Full-width thick Navy Blue ── */
@@ -153,18 +171,6 @@ body {
 
 .card:hover {
   border-color: var(--clr-primary);
-}
-
-main.container {
-  flex: 1;
-  padding-block: var(--space-lg);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-lg);
-}
-
-.search-card {
-  background: var(--clr-surface);
 }
 
 /* Input rows */
@@ -260,7 +266,6 @@ main.container {
   font-size: 1.1rem;
   cursor: pointer;
   display: flex; align-items: center; justify-content: center;
-  transition: background var(--transition), color var(--transition);
   align-self: center;
   margin-top: 4px;
 }
@@ -537,7 +542,7 @@ main.container {
   color: var(--clr-text-muted);
 }
 
-/* Route timeline */
+/* ── Route timeline */
 .route-timeline {
   display: flex;
   align-items: center;
@@ -547,6 +552,53 @@ main.container {
   padding-bottom: 4px;
 }
 
+.layover-warning {
+  background: #fff3cd;
+  border: 1px solid #ffe0b2;
+  border-radius: var(--radius-sm);
+  padding: var(--space-sm) var(--space-md);
+  margin: var(--space-md) 0;
+  color: var(--clr-text-muted);
+  font-size: var(--fs-sm);
+}
+
+.layover-warning strong {
+  color: var(--clr-primary);
+  display: block;
+  margin-bottom: var(--space-xs);
+}
+
+/* Direct train baseline card */
+.route-card.direct-baseline {
+  border-left: 4px solid var(--clr-primary);
+  background: #e8f4fd;
+  margin-bottom: var(--space-md);
+}
+
+.route-card.direct-baseline .card-top {
+  border: none;
+  background: transparent;
+}
+
+.route-card.direct-baseline .train-name {
+  color: var(--clr-primary);
+  font-weight: 700;
+}
+
+.route-card.direct-baseline .train-number {
+  color: var(--clr-primary);
+}
+
+.route-card.direct-baseline .fare {
+  color: var(--clr-primary);
+}
+
+.route-card.direct-baseline .layover-warning {
+  background: #d4edda;
+  border-color: #c3e6cb;
+}
+
+/* Timeline stations */
 .timeline-station {
   display: flex;
   flex-direction: column;
@@ -571,6 +623,7 @@ main.container {
   text-overflow: ellipsis;
 }
 
+/* Timeline line */
 .timeline-line {
   flex: 1;
   min-width: 40px;
@@ -614,6 +667,60 @@ main.container {
   border: 1px solid var(--clr-border);
 }
 
+/* ── Fare Details (expandable) ── */
+.fare-details {
+  margin-top: var(--space-md);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius-md);
+  background: var(--clr-surface);
+}
+
+.fare-details summary {
+  padding: var(--space-sm) var(--space-md);
+  font-weight: 700;
+  color: var(--clr-primary);
+  cursor: pointer;
+  border-bottom: 1px solid var(--clr-border);
+  list-style: none;
+}
+
+.fare-details summary::-webkit-details-marker {
+  display: none;
+}
+
+.fare-details summary::marker {
+  content: none;
+}
+
+.fare-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-sm);
+}
+
+.fare-table td {
+  padding: 6px var(--space-md);
+  border-bottom: 1px solid #eaeaea;
+  text-align: left;
+}
+
+.fare-table td:last-child {
+  text-align: right;
+}
+
+/* ── Availability Badge ── */
+.availability-badge {
+  display: inline-block;
+  margin-top: var(--space-xs);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  color: #8a0000;
+  background: #fff3cd;
+  border: 1px solid var(--clr-accent);
+  border-radius: var(--radius-sm);
+  padding: 2px 8px;
+}
+
 /* Savings badge */
 .savings-badge {
   margin-left: auto;
@@ -636,6 +743,9 @@ main.container {
   border: 1px solid var(--clr-border);
   border-radius: var(--radius-md);
   background: var(--clr-surface);
+  height: 400px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 }
 
 .map-title {
@@ -643,6 +753,9 @@ main.container {
   font-weight: 600;
   margin-bottom: var(--space-md);
   color: var(--clr-primary);
+  height: 30px;
+  line-height: 30px;
+  padding: 0 var(--space-md);
 }
 
 /* ── Footer ── */

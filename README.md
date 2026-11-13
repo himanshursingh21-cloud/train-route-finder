@@ -27,7 +27,7 @@ The backend loads `data/edges.parquet` (100k+ fare/travel-time edges) and `data/
 |------------|-------------|
 | `cheapest` | `cost` (fare) |
 | `fastest` | `time_taken` (hours) |
-| `balanced` | `cost + (time_taken × ₹150)` |
+| `balanced` | `cost + (150 / 60.0) * time_taken` — float math: ₹150 per hour of travel time |
 
 When a travel class is selected, only `IN_TRAIN` edges matching that `classCode` are considered; transfer edges are always eligible. The algorithm returns total cost, total time, and the ordered list of route legs with per-leg coordinates.
 

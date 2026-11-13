@@ -137,7 +137,7 @@ def build_graph_from_parquet(
             source=src,
             target=tgt,
             cost=float(row.totalFare),
-            time_taken=float(row.travel_min) / 60.0,  # minutes → hours
+            time_taken=int(row.travel_min),  # minutes (integer), not hours
             edge_type="IN_TRAIN",
             classCode=row.classCode,
             fare_breakdown=fare_breakdown,
@@ -183,12 +183,12 @@ def build_graph_from_parquet(
                     continue  # deduplicate across class variants
 
                 seen_transfers.add(key)
-                wait_h = (dep_min - arr_min) / 60.0
+                wait_min = dep_min - arr_min  # already in minutes
                 graph.add_edge(Edge(
                     source=arr_node,
                     target=dep_node,
                     cost=0.0,
-                    time_taken=wait_h,
+                    time_taken=wait_min,  # minutes (integer)
                     edge_type="TRANSFER",
                 ))
 

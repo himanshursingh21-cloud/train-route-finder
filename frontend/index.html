@@ -51,7 +51,7 @@
                 placeholder="e.g. New Delhi"
                 autocomplete="off"
                 aria-required="true"
-                list="station-options"
+                list="stations-list"
               />
             </div>
           </div>
@@ -72,14 +72,14 @@
                 placeholder="e.g. Mumbai CST"
                 autocomplete="off"
                 aria-required="true"
-                list="station-options"
+                list="stations-list"
               />
             </div>
           </div>
         </div>
 
         <!-- Datalist for autocomplete (populated by JS) -->
-        <datalist id="station-options"></datalist>
+        <datalist id="stations-list"></datalist>
 
         <!-- Class & Date -->
         <div class="options-row">
@@ -124,6 +124,17 @@
               <span>⚖️ Balanced</span>
             </label>
           </div>
+        </div>
+
+        <!-- Max Layovers -->
+        <div class="input-group" style="margin-top: var(--space-md);">
+          <label for="max-layovers" class="input-label">Max Layovers</label>
+          <select id="max-layovers" name="max_layovers" class="select-input" aria-label="Maximum number of layovers">
+            <option value="0">0 (Direct only)</option>
+            <option value="1">1 Layover</option>
+            <option value="2">2 Layovers</option>
+            <option value="any">Any</option>
+          </select>
         </div>
 
         <!-- Submit -->
